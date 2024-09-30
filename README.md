@@ -9,12 +9,12 @@
 
 ## Objetivo
 
-CRUD de Empresas para validaÁ„o de Testes de ServiÁo/IntegraÁ„o
+CRUD de Empresas para valida√ß√£o de Testes de Servi√ßo/Integra√ß√£o
 
-## InstruÁıes para Rodar Testes (Prosoft.Company.Repositories)
+## Instru√ß√µes para Rodar Testes (Prosoft.Company.Repositories)
 
-- Para rodar os testes È necess·rio ter pelo menos uma instancia do PostgreSQL tanto local (OnPremisses, WSL ou Container)
-ou instancia remota (desde que tenha acesso e tenha permiss„o de criar databases e rules)
+- Para rodar os testes √© necess√°rio ter pelo menos uma instancia do PostgreSQL tanto local (OnPremisses, WSL ou Container)
+ou instancia remota (desde que tenha acesso e tenha permiss√£o de criar databases e rules)
 - Criar arquivo .env configurando seus dados baseados .model-env 
 
 ### Modelo de arquivo .env
@@ -27,28 +27,28 @@ DB_PASSWORD=[senha]
 TEST_CONNECTION=Host=[servidor];Port=5432;Database=postgres;Username=postgres;Password=[senha_usuario_master];Include Error Detail=true;
 ```
 
-### Script de CriaÁ„o da Tabela
+### Script de Cria√ß√£o da Tabela
 ```
--- Conceder permissıes totais no esquema p˙blico
+-- Conceder permiss√µes totais no esquema p√∫blico
 GRANT ALL PRIVILEGES ON SCHEMA public TO @userName;
 
--- Conceder permissıes totais em todas as tabelas, sequÍncias e funÁıes no esquema 'geral'
+-- Conceder permiss√µes totais em todas as tabelas, sequ√™ncias e fun√ß√µes no esquema 'geral'
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO @userName;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO @userName;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO @userName;
 
--- Criar schema 'geral' se n„o existir
+-- Criar schema 'geral' se n√£o existir
 CREATE SCHEMA IF NOT EXISTS geral;
 
--- Conceder permissıes totais no esquema geral
+-- Conceder permiss√µes totais no esquema geral
 GRANT ALL PRIVILEGES ON SCHEMA geral TO @userName;
 
--- Conceder permissıes totais em todas as tabelas, sequÍncias e funÁıes no esquema 'geral'
+-- Conceder permiss√µes totais em todas as tabelas, sequ√™ncias e fun√ß√µes no esquema 'geral'
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA geral TO @userName;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA geral TO @userName;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA geral TO @userName;
 
--- CriaÁ„o da tabela 'empresas'
+-- Cria√ß√£o da tabela 'empresas'
 CREATE TABLE IF NOT EXISTS geral.empresas (
     Id UUID PRIMARY KEY NOT NULL,
     Nome VARCHAR(255) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS geral.empresas (
     DataAtualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Para Garantir caso a tabela exista e n„o seja criada executa um truncate
+-- Para Garantir caso a tabela exista e n√£o seja criada executa um truncate
 TRUNCATE TABLE geral.empresas CASCADE;
 ```
 
@@ -70,7 +70,7 @@ services:
   postgresql:
     image: bitnami/postgresql:16.4.0
     environment:
-      - POSTGRES_PASSWORD=12345678  # Vari·vel de senha correta para o PostgreSQL
+      - POSTGRES_PASSWORD=12345678  # Vari√°vel de senha correta para o PostgreSQL
       - PATH=/opt/bitnami/postgresql/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - HOME=/
       - OS_ARCH=amd64
@@ -87,4 +87,13 @@ services:
       - /var/lib/docker/volumes/1f91ee68fc564e6662f83db8977c34b25d6baa327559a04ed8079b17730ef51d/_data:/bitnami/postgresql
       - /var/lib/docker/volumes/639591f5cdf35c9fdb51f8e9e589e371a27bf3755dd83f90f593b7be61891440/_data:/docker-entrypoint-initdb.d
       - /var/lib/docker/volumes/469b9d1e637948d6d42b983455cbc6bd0aaa72da2db86364a4fe00b0935fbaf2/_data:/docker-entrypoint-preinitdb.d
+```
+
+### Comando para executar no bash
+```
+docker run -d \
+  --name postgresql \
+  -e POSTGRESQL_PASSWORD=12345678 \
+  -p 5432:5432 \
+  bitnami/postgresql:latest
 ```
