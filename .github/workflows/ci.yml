@@ -21,7 +21,6 @@ jobs:
 
     - name: Set up Docker
       run: |
-        echo "version: '3.8'" > docker-compose.yml
         echo "services:" >> docker-compose.yml
         echo "  postgresql:" >> docker-compose.yml
         echo "    image: bitnami/postgresql:16.4.0" >> docker-compose.yml
