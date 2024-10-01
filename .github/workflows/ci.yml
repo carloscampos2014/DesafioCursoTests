@@ -21,14 +21,18 @@ jobs:
 
     - name: Set up Docker
       run: |
-        echo "services:" >> docker-compose.yml
+        echo "services:" > docker-compose.yml
         echo "  postgresql:" >> docker-compose.yml
-        echo "    image: bitnami/postgresql:16.4.0" >> docker-compose.yml
+        echo "    image: postgres:16" >> docker-compose.yml
         echo "    environment:" >> docker-compose.yml
         echo "      - POSTGRES_PASSWORD=12345678" >> docker-compose.yml
         echo "    ports:" >> docker-compose.yml
         echo "      - '5432:5432'" >> docker-compose.yml
-        docker compose up
+        docker compose up -d
+
+    - name: Stop and remove containers
+      run: |
+        docker compose down
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v1
