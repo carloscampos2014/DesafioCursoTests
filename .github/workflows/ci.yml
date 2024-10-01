@@ -1,0 +1,44 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create .env file
+      run: |
+        echo "DB_HOST=localhost" >> .env
+        echo "DB_NAME=empresas" >> .env
+        echo "DB_PORT=5432" >> .env
+        echo "DB_USER=teste" >> .env
+        echo "DB_PASSWORD=12345678" >> .env
+        echo "TEST_CONNECTION=Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345678;Include Error Detail=true;" >> .env
+
+    - name: Set up Docker
+      run: |
+        docker run -d \
+          --name postgresql \
+          -e POSTGRES_PASSWORD=12345678 \
+          -p 5432:5432 \
+          bitnami/postgresql:16.4.0
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build and Test
+      run: |
+        dotnet restore
+        dotnet build
+        dotnet test
+
+    - name: Stop and remove containers
+      run: |
+        docker stop postgresql
+        docker rm postgresql
