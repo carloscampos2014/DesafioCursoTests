@@ -76,7 +76,6 @@ public class DatabaseFixture : IDisposable
 
                 connection.Open();
 
-                // Verificar e criar o banco de dados se necessário
                 var dbExists = connection.QuerySingleOrDefault<int?>(
                     "SELECT 1 FROM pg_database WHERE datname = @dbName;",
                     new { dbName });
@@ -85,7 +84,6 @@ public class DatabaseFixture : IDisposable
                     connection.Execute($"CREATE DATABASE {dbName};");
                 }
 
-                // Verificar e criar o usuário se necessário
                 var userExists = connection.QuerySingleOrDefault<int?>(
                     "SELECT 1 FROM pg_roles WHERE rolname = @userName;",
                     new { userName });
@@ -94,7 +92,6 @@ public class DatabaseFixture : IDisposable
                     connection.Execute($"CREATE ROLE {userName} LOGIN PASSWORD '{userPassword}';");
                 }
 
-                // Garantir privilégios
                 connection.Execute($"GRANT CONNECT ON DATABASE {dbName} TO {userName};");
                 connection.Execute($"GRANT ALL PRIVILEGES ON DATABASE {dbName} TO {userName};");
             }
@@ -104,7 +101,6 @@ public class DatabaseFixture : IDisposable
             }
         }
 
-        // Criar tabelas se necessário
         using (var connection = _connectionFactory.CreateConnection())
         {
             connection.Open();
@@ -124,7 +120,7 @@ public class DatabaseFixture : IDisposable
             {
                 connection.Open();
                 connection.Execute($"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{dbName}' AND pid <> pg_backend_pid();");
-                Thread.Sleep(1000); // 1 segundo (ajuste conforme necessário)
+                Thread.Sleep(1000); 
                 connection.Execute($"DROP DATABASE IF EXISTS {dbName};");
                 connection.Execute($"DROP ROLE IF EXISTS {userName};");
             }

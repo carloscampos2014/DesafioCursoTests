@@ -4,8 +4,8 @@
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue?logo=postgresql&style=for-the-badge)
-![Dapper](https://img.shields.io/badge/Dapper-MicroORM-blue?logo=nuget&style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue?logo=postgresql&style=for-the-badge&logoColor=white)
+![Dapper](https://img.shields.io/badge/Dapper-MicroORM-blue?logo=nuget&style=for-the-badge&logoColor=white)
 
 ## Objetivo
 
@@ -15,7 +15,8 @@ CRUD de Empresas para validação de Testes de Serviço/Integração
 
 - Para rodar os testes é necessário ter pelo menos uma instancia do PostgreSQL tanto local (OnPremisses, WSL ou Container)
 ou instancia remota (desde que tenha acesso e tenha permissão de criar databases e rules)
-- Criar arquivo .env configurando seus dados baseados .model-env 
+- Criar arquivo .env configurando seus dados baseados .model-env opcionalmente você pode deixar essas configurações 
+no App.Config e usar a classe AppConfigMannager para pegar os dados de conexão
 
 ### Modelo de arquivo .env
 ```
@@ -25,6 +26,20 @@ DB_PORT=[porta]
 DB_USER={usuariobanco}
 DB_PASSWORD=[senha]
 TEST_CONNECTION=Host=[servidor];Port=5432;Database=postgres;Username=postgres;Password=[senha_usuario_master];Include Error Detail=true;
+```
+
+### Modelo de Dados App.Config
+```
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="DB_HOST" value="[servidor]" />
+    <add key="DB_PORT" value="[porta]" />
+    <add key="DB_NAME" value="[nomebanco]" />
+    <add key="DB_PASSWORD" value="[senha]" />
+    <add key="TEST_CONNECTION" value="Host=[servidor];Port=5432;Database=postgres;Username=postgres;Password=[senha_usuario_master];Include Error Detail=true;" />
+  </appSettings>
+</configuration>
 ```
 
 ### Script de Criação da Tabela

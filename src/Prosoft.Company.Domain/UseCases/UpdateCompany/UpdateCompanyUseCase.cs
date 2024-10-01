@@ -22,7 +22,7 @@ public class UpdateCompanyUseCase : IUpdateCompanyUseCase
             var resultValidation = _empresasModelValidator.Validate(model);
             if (!resultValidation.IsValid)
             {
-                throw new InvalidOperationException($"Erro Validação: {string.Join('|', resultValidation.Errors.Select(erro => erro.ErrorMessage))}");
+                throw new InvalidOperationException($"Erro Validação:{Environment.NewLine}{string.Join(Environment.NewLine, resultValidation.Errors.Select(erro => erro.ErrorMessage))}");
             }
 
             var companyCadastrada = _empresasRepository.GetById(model.Id);

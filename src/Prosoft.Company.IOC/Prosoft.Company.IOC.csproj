@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prosoft.Company.Domain\Prosoft.Company.Domain.csproj" />
+    <ProjectReference Include="..\Prosoft.Company.Repositories\Prosoft.Company.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
