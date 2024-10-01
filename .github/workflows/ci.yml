@@ -29,7 +29,7 @@ jobs:
         echo "      - POSTGRES_PASSWORD=12345678" >> docker-compose.yml
         echo "    ports:" >> docker-compose.yml
         echo "      - '5432:5432'" >> docker-compose.yml
-        docker-compose up -d
+        docker compose up
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v1
@@ -44,4 +44,4 @@ jobs:
 
     - name: Stop and remove containers
       run: |
-        docker-compose down
+        docker compose down
