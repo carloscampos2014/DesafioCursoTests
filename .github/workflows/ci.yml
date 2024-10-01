@@ -21,11 +21,15 @@ jobs:
 
     - name: Set up Docker
       run: |
-        docker run -d \
-          --name postgresql \
-          -e POSTGRES_PASSWORD=12345678 \
-          -p 5432:5432 \
-          bitnami/postgresql:16.4.0
+        echo "version: '3.8'" > docker-compose.yml
+        echo "services:" >> docker-compose.yml
+        echo "  postgresql:" >> docker-compose.yml
+        echo "    image: bitnami/postgresql:16.4.0" >> docker-compose.yml
+        echo "    environment:" >> docker-compose.yml
+        echo "      - POSTGRES_PASSWORD=12345678" >> docker-compose.yml
+        echo "    ports:" >> docker-compose.yml
+        echo "      - '5432:5432'" >> docker-compose.yml
+        docker-compose up -d
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v1
@@ -40,5 +44,4 @@ jobs:
 
     - name: Stop and remove containers
       run: |
-        docker stop postgresql
-        docker rm postgresql
+        docker-compose down
