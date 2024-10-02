@@ -44,9 +44,11 @@ jobs:
       run: |
         ./build.sh
 
-    - name: Run tests
+    - name: Run tests excluding Prosoft.Company.WF
       run: |
-        dotnet test --filter "FullyQualifiedName!~Prosoft.Company.WF"
+        for project in $(find . -name '*.csproj' | grep -v 'Prosoft.Company.WF'); do
+            dotnet test "$project" --no-restore
+        done
 
     - name: Stop and remove containers
       run: |
