@@ -3,19 +3,8 @@ services:
     image: bitnami/postgresql:16.4.0
     environment:
       - POSTGRES_PASSWORD=12345678  # Variável de senha correta para o PostgreSQL
-      - PATH=/opt/bitnami/postgresql/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - HOME=/
-      - OS_ARCH=amd64
-      - OS_FLAVOUR=debian-12
       - OS_NAME=linux
       - APP_VERSION=16.4.0
       - BITNAMI_APP_NAME=postgresql
-      - LANG=en_US.UTF-8
-      - LANGUAGE=en_US:en
-      - NSS_WRAPPER_LIB=/opt/bitnami/common/lib/libnss_wrapper.so
     ports:
       - "5432:5432/tcp"  # Mapeamento de portas (evitar duplicatas)
-    volumes:
-      - /var/lib/docker/volumes/1f91ee68fc564e6662f83db8977c34b25d6baa327559a04ed8079b17730ef51d/_data:/bitnami/postgresql
-      - /var/lib/docker/volumes/639591f5cdf35c9fdb51f8e9e589e371a27bf3755dd83f90f593b7be61891440/_data:/docker-entrypoint-initdb.d
-      - /var/lib/docker/volumes/469b9d1e637948d6d42b983455cbc6bd0aaa72da2db86364a4fe00b0935fbaf2/_data:/docker-entrypoint-preinitdb.d
