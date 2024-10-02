@@ -10,15 +10,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create .env file
-      run: |
-        echo "DB_HOST=localhost" >> .env
-        echo "DB_NAME=empresas" >> .env
-        echo "DB_PORT=5432" >> .env
-        echo "DB_USER=teste" >> .env
-        echo "DB_PASSWORD=12345678" >> .env
-        echo "TEST_CONNECTION=Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345678;Include Error Detail=true;" >> .env
-
     - name: Set up Docker
       run: |
         docker run -d \
@@ -43,6 +34,16 @@ jobs:
     - name: Build projects excluding Prosoft.Company.WF
       run: |
         ./build.sh
+
+    - name: Create .env file in test output directory
+      run: |
+        mkdir -p tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0 && \
+        echo "DB_HOST=localhost" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env && \
+        echo "DB_NAME=empresas" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env && \
+        echo "DB_PORT=5432" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env && \
+        echo "DB_USER=teste" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env && \
+        echo "DB_PASSWORD=12345678" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env && \
+        echo "TEST_CONNECTION=Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345678;Include Error Detail=true;" >> tests/Prosoft.Company.Repositories.Tests/bin/Debug/net8.0/.env
 
     - name: Run tests excluding Prosoft.Company.WF
       run: |
