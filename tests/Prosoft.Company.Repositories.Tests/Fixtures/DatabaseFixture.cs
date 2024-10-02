@@ -104,7 +104,7 @@ public class DatabaseFixture : IDisposable
         using (var connection = _connectionFactory.CreateConnection())
         {
             connection.Open();
-            var createTableScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\CreateTable.sql");
+            var createTableScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "CreateTable.sql");
             connection.Execute(File.ReadAllText(createTableScriptPath).Replace("@userName", userName));
         }
     }
