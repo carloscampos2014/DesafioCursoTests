@@ -76,20 +76,26 @@ public class DatabaseFixture : IDisposable
 
                 connection.Open();
 
-                var dbExists = connection.QuerySingleOrDefault<int?>(
-                    "SELECT 1 FROM pg_database WHERE datname = @dbName;",
-                    new { dbName });
-                if (!dbExists.HasValue)
+                if (dbName.ToLower() != "postgres")
                 {
-                    connection.Execute($"CREATE DATABASE {dbName};");
+                    var dbExists = connection.QuerySingleOrDefault<int?>(
+                        "SELECT 1 FROM pg_database WHERE datname = @dbName;",
+                        new { dbName });
+                    if (!dbExists.HasValue)
+                    {
+                        connection.Execute($"CREATE DATABASE {dbName};");
+                    }
                 }
 
-                var userExists = connection.QuerySingleOrDefault<int?>(
-                    "SELECT 1 FROM pg_roles WHERE rolname = @userName;",
-                    new { userName });
-                if (!userExists.HasValue)
+                if (userName.ToLower() != "postgres")
                 {
-                    connection.Execute($"CREATE ROLE {userName} LOGIN PASSWORD '{userPassword}';");
+                    var userExists = connection.QuerySingleOrDefault<int?>(
+                        "SELECT 1 FROM pg_roles WHERE rolname = @userName;",
+                        new { userName });
+                    if (!userExists.HasValue)
+                    {
+                        connection.Execute($"CREATE ROLE {userName} LOGIN PASSWORD '{userPassword}';");
+                    }
                 }
 
                 connection.Execute($"GRANT CONNECT ON DATABASE {dbName} TO {userName};");
@@ -120,9 +126,17 @@ public class DatabaseFixture : IDisposable
             {
                 connection.Open();
                 connection.Execute($"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{dbName}' AND pid <> pg_backend_pid();");
-                Thread.Sleep(1000); 
-                connection.Execute($"DROP DATABASE IF EXISTS {dbName};");
-                connection.Execute($"DROP ROLE IF EXISTS {userName};");
+                Thread.Sleep(1000);
+
+                if (dbName.ToLower() != "postgres")
+                {
+                    connection.Execute($"DROP DATABASE IF EXISTS {dbName};");
+                }
+
+                if (userName.ToLower() != "postgres")
+                {
+                    connection.Execute($"DROP ROLE IF EXISTS {userName};");
+                }
             }
             catch (Exception ex)
             {
