@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -21,30 +21,34 @@ jobs:
 
     - name: Set up Docker
       run: |
-        echo "services:" > docker-compose.yml
-        echo "  postgresql:" >> docker-compose.yml
-        echo "    image: postgres:16" >> docker-compose.yml
-        echo "    environment:" >> docker-compose.yml
-        echo "      - POSTGRES_PASSWORD=12345678" >> docker-compose.yml
-        echo "    ports:" >> docker-compose.yml
-        echo "      - '5432:5432'" >> docker-compose.yml
-        docker compose up -d
-
-    - name: Stop and remove containers
-      run: |
-        docker compose down
+        docker run -d \
+          --name postgresql \
+          -e POSTGRES_PASSWORD=12345678 \
+          -p 5432:5432 \
+          bitnami/postgresql:16.4.0
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '8.0.x'
 
-    - name: Build and Test
+    - name: Create build script
       run: |
-        dotnet restore
-        dotnet build
-        dotnet test
+        echo '#!/bin/bash' > build.sh
+        echo 'for project in $(find . -name '\''*.csproj'\'' | grep -v '\''Prosoft.Company.WF'\''); do' >> build.sh
+        echo '    dotnet build "$project"' >> build.sh
+        echo 'done' >> build.sh
+        chmod +x build.sh
+
+    - name: Build projects excluding Prosoft.Company.WF
+      run: |
+        ./build.sh
+
+    - name: Run tests
+      run: |
+        dotnet test --filter "FullyQualifiedName!~Prosoft.Company.WF"
 
     - name: Stop and remove containers
       run: |
-        docker compose down
+        docker stop postgresql
+        docker rm postgresql
