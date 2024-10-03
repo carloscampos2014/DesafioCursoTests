@@ -28,7 +28,7 @@ DB_PASSWORD=[senha]
 TEST_CONNECTION=Host=[servidor];Port=5432;Database=postgres;Username=postgres;Password=[senha_usuario_master];Include Error Detail=true;
 ```
 
-### Modelo de Dados App.Config
+### Modelo de Dados App.Config para Console Application ou WindowsForm Application
 ```
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
@@ -40,6 +40,20 @@ TEST_CONNECTION=Host=[servidor];Port=5432;Database=postgres;Username=postgres;Pa
     <add key="TEST_CONNECTION" value="Host=[servidor];Port=5432;Database=postgres;Username=postgres;Password=[senha_usuario_master];Include Error Detail=true;" />
   </appSettings>
 </configuration>
+```
+
+### Modelo de Dados appsettings.json
+```
+{
+  "AppSettings": {
+    "DB_HOST": "172.17.251.140",
+    "DB_PORT": "5432",
+    "DB_NAME": "empresa",
+    "DB_USER": "teste",
+    "DB_PASSWORD": "12345678",
+    "TEST_CONNECTION": "Host=172.17.251.140;Port=5432;Database=postgres;Username=postgres;Password=12345678;Include Error Detail=true;"
+  }
+}
 ```
 
 ### Script de Criação da Tabela

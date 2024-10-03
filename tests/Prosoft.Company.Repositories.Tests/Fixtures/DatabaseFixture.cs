@@ -73,7 +73,6 @@ public class DatabaseFixture : IDisposable
         {
             try
             {
-
                 connection.Open();
 
                 if (dbName.ToLower() != "postgres")

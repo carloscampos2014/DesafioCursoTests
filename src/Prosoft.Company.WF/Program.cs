@@ -25,7 +25,7 @@ namespace Prosoft.Company.WF
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            var container = DependencyInjector.Init();
+            var container = DependencyInjector.Init(ConfigManagerType.EnvironmentFile);
             AddCompanyUseCase = container.GetInstance<IAddCompanyUseCase>();
             DeleteCompanyUseCase = container.GetInstance<IDeleteCompanyUseCase>();
             GetAllCompanyUseCase = container.GetInstance<IGetAllCompanyUseCase>();

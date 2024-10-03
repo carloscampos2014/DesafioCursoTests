@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Reflection;
 using FluentValidation;
 using Prosoft.Company.Domain.Contracts;
@@ -18,11 +19,20 @@ namespace Prosoft.Company.IOC;
 
 public static class DependencyInjector
 {
-    public static Container Init()
+    public static Container Init(ConfigManagerType configManagerType)
     {
         var container = new Container();
 
-        container.Register<IConfigManager, ConfigManager>();
+        switch (configManagerType)
+        {
+            case ConfigManagerType.EnvironmentFile:
+                container.Register<IConfigManager, ConfigManager>();
+                break;
+            case ConfigManagerType.ApplicationConfig:
+                container.Register<IConfigManager, AppConfigManager>();
+                break;
+        }
+
         container.Register<IDbConnectionFactory, DbConnectionFactory>();
         container.Register<ICompanyRepository, CompanyRepository>();
         container.Register<IValidator<CompanyModel>, CompanyValidator>();
