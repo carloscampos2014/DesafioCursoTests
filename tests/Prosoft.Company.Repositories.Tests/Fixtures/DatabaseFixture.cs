@@ -58,7 +58,6 @@ public class DatabaseFixture : IDisposable
     {
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
             connection.Execute("DELETE FROM geral.empresas");
         }
     }
@@ -73,9 +72,7 @@ public class DatabaseFixture : IDisposable
         {
             try
             {
-                connection.Open();
-
-                if (dbName.ToLower() != "postgres")
+                if (string.Compare(dbName, "postgres", true) != 0)
                 {
                     var dbExists = connection.QuerySingleOrDefault<int?>(
                         "SELECT 1 FROM pg_database WHERE datname = @dbName;",
@@ -86,7 +83,7 @@ public class DatabaseFixture : IDisposable
                     }
                 }
 
-                if (userName.ToLower() != "postgres")
+                if (string.Compare(userName,"postgres", true) != 0)
                 {
                     var userExists = connection.QuerySingleOrDefault<int?>(
                         "SELECT 1 FROM pg_roles WHERE rolname = @userName;",
@@ -108,7 +105,6 @@ public class DatabaseFixture : IDisposable
 
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
             var createTableScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "CreateTable.Sql");
             connection.Execute(File.ReadAllText(createTableScriptPath).Replace("@userName", userName));
         }
@@ -123,16 +119,15 @@ public class DatabaseFixture : IDisposable
         {
             try
             {
-                connection.Open();
                 connection.Execute($"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{dbName}' AND pid <> pg_backend_pid();");
                 Thread.Sleep(1000);
 
-                if (dbName.ToLower() != "postgres")
+                if (string.Compare(dbName, "postgres", true) != 0)
                 {
                     connection.Execute($"DROP DATABASE IF EXISTS {dbName};");
                 }
 
-                if (userName.ToLower() != "postgres")
+                if (string.Compare(userName, "postgres", true) != 0)
                 {
                     connection.Execute($"DROP ROLE IF EXISTS {userName};");
                 }

@@ -22,7 +22,6 @@ public class CompanyRepository : ICompanyRepository
 
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
             string sql = @"INSERT INTO geral.empresas(Id, Nome, Cnpj, Endereco, Telefone, Email)
                            VALUES(@Id, @Nome, @Cnpj, @Endereco, @Telefone, @Email);";
             var parameters = new {
@@ -42,7 +41,6 @@ public class CompanyRepository : ICompanyRepository
     {
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
             string sql = "DELETE FROM geral.empresas WHERE Id = @Id";
             var parameters = new { Id = id };
 
@@ -54,8 +52,7 @@ public class CompanyRepository : ICompanyRepository
     {
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
-            string sql = "SELECT * FROM geral.empresas ORDER BY Nome";
+            string sql = "SELECT Id, Nome, Cnpj, Endereco, Telefone, Email, DataCriacao, DataAtualizacao FROM geral.empresas ORDER BY Nome";
             return connection.Query<CompanyModel>(sql);
         }
     }
@@ -69,8 +66,7 @@ public class CompanyRepository : ICompanyRepository
 
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
-            string sql = "SELECT * FROM geral.empresas WHERE Cnpj = @Cnpj";
+            string sql = "SELECT Id, Nome, Cnpj, Endereco, Telefone, Email, DataCriacao, DataAtualizacao FROM geral.empresas WHERE Cnpj = @Cnpj";
             var parameters = new { Cnpj = cnpj };
 
             return connection.QueryFirstOrDefault<CompanyModel>(sql, parameters);
@@ -81,8 +77,7 @@ public class CompanyRepository : ICompanyRepository
     {
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
-            string sql = "SELECT * FROM geral.empresas WHERE Id = @Id";
+            string sql = "SELECT Id, Nome, Cnpj, Endereco, Telefone, Email, DataCriacao, DataAtualizacao FROM geral.empresas WHERE Id = @Id";
             var parameters = new { Id = id };
 
             return connection.QueryFirstOrDefault<CompanyModel>(sql, parameters);
@@ -98,7 +93,6 @@ public class CompanyRepository : ICompanyRepository
 
         using (var connection = _connectionFactory.CreateConnection())
         {
-            connection.Open();
             string sql = @"UPDATE geral.empresas SET
                            Nome = @Nome, 
                            Cnpj = @Cnpj,
