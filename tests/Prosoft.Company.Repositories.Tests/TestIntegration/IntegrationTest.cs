@@ -34,7 +34,7 @@ public class IntegrationTest
     {
         _fixture = fixture;
         var serviceProvider = new ServiceCollection()
-            .AddScoped<IConfigManager, AppConfigManager>()
+            .AddScoped<IConfigManager, ConfigManager>()
             .AddScoped<IDbConnectionFactory, DbConnectionFactory>()
             .AddScoped<ICompanyRepository, CompanyRepository>()
             .AddScoped<IValidator<CompanyModel>, CompanyValidator>()
